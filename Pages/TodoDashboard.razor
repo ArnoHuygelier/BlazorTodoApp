@@ -1,0 +1,48 @@
+@page "/todos"
+@using System.Linq
+@using BlazorTodoApp.Components
+@using BlazorTodoApp.Models
+
+<PageTitle>Todo Dashboard</PageTitle>
+
+<div class="todo-dashboard-shell">
+    <div class="todo-dashboard-card">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3 mb-4">
+            <div>
+                <p class="text-muted mb-1">Stay organized anywhere</p>
+                <h1 class="h3 mb-0">Todo dashboard</h1>
+            </div>
+            <button class="btn btn-primary"
+                    type="button"
+                    data-test="add-todo-button"
+                    @onclick="OpenCreateModal">
+                Add todo
+            </button>
+        </div>
+
+        @if (!StateService.IsInitialized)
+        {
+            <p class="text-muted">Loading your todos...</p>
+        }
+        else if (!visibleTodos.Any())
+        {
+            <EmptyState OnCreateRequested="OpenCreateModal" />
+        }
+        else
+        {
+            <TodoList Items="visibleTodos"
+                      OnEditRequested="HandleEditRequested"
+                      OnToggleRequested="HandleToggleAsync"
+                      OnDeleteRequested="HandleDeleteAsync" />
+        }
+    </div>
+</div>
+
+<TodoEditModal Model="formModel"
+               IsOpen="isModalOpen"
+               Title="@ModalTitle"
+               Mode="editMode"
+               IsBusy="isFormBusy"
+               ErrorMessage="formError"
+               OnCancel="CloseModal"
+               OnSubmit="HandleFormSubmitAsync" />

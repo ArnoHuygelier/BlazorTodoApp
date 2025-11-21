@@ -28,14 +28,14 @@
 
 **Purpose**: Core models, storage plumbing, and services required before any UI story can start.
 
-- [ ] T003 Add `TodoItem` entity with validation constraints to `BlazorTodoApp/Models/TodoItem.cs`
-- [ ] T004 Add `TodoFilterOption` enum plus `TodoFilter` record to `BlazorTodoApp/Models/TodoFilter.cs`
-- [ ] T005 Define `ITodoRepository` abstraction exposing CRUD + filter persistence in `BlazorTodoApp/Services/ITodoRepository.cs`
-- [ ] T006 [P] Implement `LocalStorageTodoRepository` using `IJSRuntime` and JSON serialization per contract in `BlazorTodoApp/Services/LocalStorageTodoRepository.cs`
-- [ ] T007 [P] Add `todoStorage.js` module that wraps `localStorage` get/set/remove operations in `BlazorTodoApp/wwwroot/js/todoStorage.js` and ensure it is referenced from `wwwroot/index.html`
-- [ ] T008 Create `TodoStateService` that loads items/filter, raises change notifications, and enforces invariants in `BlazorTodoApp/Services/TodoStateService.cs`
-- [ ] T009 Register `ITodoRepository` + `TodoStateService` in DI inside `BlazorTodoApp/Program.cs`
-- [ ] T010 [P] Add xUnit tests covering repository serialization/error handling in `BlazorTodoApp.Tests/Services/LocalStorageTodoRepositoryTests.cs`
+- [X] T003 Add `TodoItem` entity with validation constraints to `BlazorTodoApp/Models/TodoItem.cs`
+- [X] T004 Add `TodoFilterOption` enum plus `TodoFilter` record to `BlazorTodoApp/Models/TodoFilter.cs`
+- [X] T005 Define `ITodoRepository` abstraction exposing CRUD + filter persistence in `BlazorTodoApp/Services/ITodoRepository.cs`
+- [X] T006 [P] Implement `LocalStorageTodoRepository` using `IJSRuntime` and JSON serialization per contract in `BlazorTodoApp/Services/LocalStorageTodoRepository.cs`
+- [X] T007 [P] Add `todoStorage.js` module that wraps `localStorage` get/set/remove operations in `BlazorTodoApp/wwwroot/js/todoStorage.js` and ensure it is referenced from `wwwroot/index.html`
+- [X] T008 Create `TodoStateService` that loads items/filter, raises change notifications, and enforces invariants in `BlazorTodoApp/Services/TodoStateService.cs`
+- [X] T009 Register `ITodoRepository` + `TodoStateService` in DI inside `BlazorTodoApp/Program.cs`
+- [X] T010 [P] Add xUnit tests covering repository serialization/error handling in `BlazorTodoApp.Tests/Services/LocalStorageTodoRepositoryTests.cs`
 
 **Checkpoint**: Storage + service layer ready for UI work.
 
@@ -49,18 +49,18 @@
 
 ### Tests for User Story 1
 
-- [ ] T011 [P] [US1] Extend `BlazorTodoApp.Tests/Services/TodoStateServiceTests.cs` to cover add/edit/delete/toggle workflows
-- [ ] T012 [P] [US1] Add bUnit tests simulating CRUD flows via forms and modal in `BlazorTodoApp.Tests/Components/TodoDashboardTests.cs`
+- [X] T011 [P] [US1] Extend `BlazorTodoApp.Tests/Services/TodoStateServiceTests.cs` to cover add/edit/delete/toggle workflows
+- [X] T012 [P] [US1] Add bUnit tests simulating CRUD flows via forms and modal in `BlazorTodoApp.Tests/Components/TodoDashboardTests.cs`
 
 ### Implementation for User Story 1
 
-- [ ] T013 [US1] Implement routed dashboard page markup (`@page "/todos"`) with empty state host in `BlazorTodoApp/Pages/TodoDashboard.razor`
-- [ ] T014 [US1] Add partial class logic that binds to `TodoStateService`, handles validation, and launches modal in `BlazorTodoApp/Pages/TodoDashboard.razor.cs`
-- [ ] T015 [P] [US1] Create `TodoList` component that accepts todos and emits edit/toggle/delete events in `BlazorTodoApp/Components/TodoList.razor`
-- [ ] T016 [P] [US1] Create `TodoItemRow` component with buttons, keyboard shortcuts, and visual states in `BlazorTodoApp/Components/TodoItemRow.razor`
-- [ ] T017 [P] [US1] Build `TodoEditModal` component with form fields, ARIA attributes, focus trap, and Save/Cancel in `BlazorTodoApp/Components/TodoEditModal.razor`
-- [ ] T018 [US1] Add reusable empty-state component with quick-add CTA in `BlazorTodoApp/Components/EmptyState.razor`
-- [ ] T019 [US1] Update `Shared/NavMenu.razor` (and default route if needed) to link to `/todos` so the dashboard is accessible from the shell
+- [X] T013 [US1] Implement routed dashboard page markup (`@page "/todos"`) with empty state host in `BlazorTodoApp/Pages/TodoDashboard.razor`
+- [X] T014 [US1] Add partial class logic that binds to `TodoStateService`, handles validation, and launches modal in `BlazorTodoApp/Pages/TodoDashboard.razor.cs`
+- [X] T015 [P] [US1] Create `TodoList` component that accepts todos and emits edit/toggle/delete events in `BlazorTodoApp/Components/TodoList.razor`
+- [X] T016 [P] [US1] Create `TodoItemRow` component with buttons, keyboard shortcuts, and visual states in `BlazorTodoApp/Components/TodoItemRow.razor`
+- [X] T017 [P] [US1] Build `TodoEditModal` component with form fields, ARIA attributes, focus trap, and Save/Cancel in `BlazorTodoApp/Components/TodoEditModal.razor`
+- [X] T018 [US1] Add reusable empty-state component with quick-add CTA in `BlazorTodoApp/Components/EmptyState.razor`
+- [X] T019 [US1] Update `Shared/NavMenu.razor` (and default route if needed) to link to `/todos` so the dashboard is accessible from the shell
 
 **Checkpoint**: CRUD experiences fully functional and independently testable (MVP complete).
 

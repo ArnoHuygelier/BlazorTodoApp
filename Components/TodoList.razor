@@ -1,0 +1,27 @@
+@using BlazorTodoApp.Models
+@using Microsoft.AspNetCore.Components
+@namespace BlazorTodoApp.Components
+
+<div class="d-flex flex-column gap-3" role="list">
+    @foreach (var todo in Items)
+    {
+        <TodoItemRow Todo="todo"
+                     OnToggleRequested="OnToggleRequested"
+                     OnEditRequested="OnEditRequested"
+                     OnDeleteRequested="OnDeleteRequested" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public IReadOnlyList<TodoItem> Items { get; set; } = Array.Empty<TodoItem>();
+
+    [Parameter]
+    public EventCallback<TodoItem> OnToggleRequested { get; set; }
+
+    [Parameter]
+    public EventCallback<TodoItem> OnEditRequested { get; set; }
+
+    [Parameter]
+    public EventCallback<TodoItem> OnDeleteRequested { get; set; }
+}

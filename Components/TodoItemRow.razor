@@ -1,0 +1,66 @@
+@using BlazorTodoApp.Models
+@using Microsoft.AspNetCore.Components
+@namespace BlazorTodoApp.Components
+
+<div class="@RowClasses"
+     data-test="todo-row"
+     data-todo-id="@Todo.Id"
+     tabindex="0">
+    <div>
+        <div class="todo-list-row__title">@Todo.Title</div>
+        @if (!string.IsNullOrWhiteSpace(Todo.Note))
+        {
+            <p class="todo-list-row__note">@Todo.Note</p>
+        }
+        <div class="todo-list-row__meta">
+            <span>Updated @Todo.UpdatedAt.ToLocalTime().ToString("g")</span>
+            @if (Todo.DueDay is not null)
+            {
+                <span class="ms-2">Due @Todo.DueDay.Value.ToString("MMM d")</span>
+            }
+        </div>
+    </div>
+    <div class="todo-list-row__actions">
+        <button type="button"
+                class="btn btn-sm btn-outline-success"
+                data-test="toggle-button"
+                aria-pressed="@Todo.IsCompleted"
+                @onclick="ToggleAsync">
+            @(Todo.IsCompleted ? "Mark Active" : "Mark Complete")
+        </button>
+        <button type="button"
+                class="btn btn-sm btn-outline-primary"
+                data-test="edit-button"
+                @onclick="EditAsync">
+            Edit
+        </button>
+        <button type="button"
+                class="btn btn-sm btn-outline-danger"
+                data-test="delete-button"
+                @onclick="DeleteAsync">
+            Delete
+        </button>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public TodoItem Todo { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<TodoItem> OnToggleRequested { get; set; }
+
+    [Parameter]
+    public EventCallback<TodoItem> OnEditRequested { get; set; }
+
+    [Parameter]
+    public EventCallback<TodoItem> OnDeleteRequested { get; set; }
+
+    private string RowClasses => $"todo-list-row {(Todo.IsCompleted ? "is-completed" : string.Empty)}";
+
+    private Task ToggleAsync() => OnToggleRequested.InvokeAsync(Todo);
+
+    private Task EditAsync() => OnEditRequested.InvokeAsync(Todo);
+
+    private Task DeleteAsync() => OnDeleteRequested.InvokeAsync(Todo);
+}
