@@ -36,6 +36,8 @@ public sealed class TodoStateService
             return;
         }
 
+        logger.LogInformation("Initializing todo state service.");
+
         var loadedItems = await repository.LoadAsync(cancellationToken);
         items.Clear();
         items.AddRange(loadedItems.OrderBy(item => item.CreatedAt));
@@ -43,6 +45,8 @@ public sealed class TodoStateService
         currentFilter = await repository.LoadFilterAsync(cancellationToken);
         RecalculateSummary();
         IsInitialized = true;
+
+        logger.LogInformation("Initialization complete with {TodoCount} todos and filter {FilterSelection}.", items.Count, currentFilter.Selection);
         NotifyStateChanged();
     }
 
@@ -65,6 +69,7 @@ public sealed class TodoStateService
 
         await PersistAsync(cancellationToken);
         RecalculateSummary();
+        logger.LogInformation("Added todo {TodoId} with title {Title}.", newItem.Id, newItem.Title);
         NotifyStateChanged();
         return newItem;
     }
@@ -78,6 +83,7 @@ public sealed class TodoStateService
         existing.UpdateDetails(title, note, dueDay, DateTimeOffset.UtcNow);
         await PersistAsync(cancellationToken);
         RecalculateSummary();
+        logger.LogInformation("Updated todo {TodoId} with title {Title}.", existing.Id, existing.Title);
         NotifyStateChanged();
     }
 
@@ -89,6 +95,7 @@ public sealed class TodoStateService
 
         await PersistAsync(cancellationToken);
         RecalculateSummary();
+        logger.LogInformation("Toggled todo {TodoId} to completed={Completed}.", existing.Id, existing.IsCompleted);
         NotifyStateChanged();
     }
 
@@ -104,6 +111,7 @@ public sealed class TodoStateService
 
         await PersistAsync(cancellationToken);
         RecalculateSummary();
+        logger.LogInformation("Deleted todo {TodoId}. Remaining count {Count}.", id, items.Count);
         NotifyStateChanged();
     }
 
@@ -119,6 +127,7 @@ public sealed class TodoStateService
         currentFilter = currentFilter.WithSelection(selection);
         await repository.SaveFilterAsync(currentFilter, cancellationToken);
         RecalculateSummary();
+        logger.LogInformation("Changed todo filter to {FilterSelection}.", currentFilter.Selection);
         NotifyStateChanged();
     }
 
@@ -141,6 +150,7 @@ public sealed class TodoStateService
 
         if (duplicate)
         {
+            logger.LogWarning("Duplicate todo title attempt detected for normalized key {NormalizedTitle}.", normalizedTitle);
             throw new InvalidOperationException("A todo with the same title already exists.");
         }
     }

@@ -114,9 +114,9 @@
 
 **Purpose**: Harden instrumentation, accessibility, and docs across stories.
 
-- [ ] T032 [P] Add structured logging + ErrorBoundary wrapping for dashboard interactions in `BlazorTodoApp/Pages/TodoDashboard.razor` and `TodoStateService`
-- [ ] T033 [P] Update `specs/001-todo-dashboard/quickstart.md` with manual verification steps for filters, counts, and virtualization
-- [ ] T034 Run full `dotnet format` + `dotnet test` pipeline and document outputs in `specs/001-todo-dashboard/checklists/qa.md`
+- [X] T032 [P] Add structured logging + ErrorBoundary wrapping for dashboard interactions in `BlazorTodoApp/Pages/TodoDashboard.razor` and `TodoStateService`
+- [X] T033 [P] Update `specs/001-todo-dashboard/quickstart.md` with manual verification steps for filters, counts, and virtualization
+- [X] T034 Run full `dotnet format` + `dotnet test` pipeline and document outputs in `specs/001-todo-dashboard/checklists/qa.md`
 
 ---
 

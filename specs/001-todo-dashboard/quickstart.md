@@ -26,10 +26,11 @@ dotnet test
 
 ## Manual Verification Checklist
 1. Create, edit (modal), toggle, and delete todos; ensure they persist after reload.
-2. Switch filters (All/Active/Completed) and confirm counts update instantly.
-3. Seed >120 todos (use quick-add helper) and scroll; `<Virtualize>` keeps the UI responsive.
-4. Confirm modals trap focus, buttons have keyboard shortcuts, and color contrast passes WCAG AA.
-5. Inspect browser console for `ILogger` output when forcing storage failures (devtools localStorage quota errors).
+2. Watch the summary badges (Total/Active/Completed) while toggling items�??counts should update immediately and stay in sync after refresh.
+3. Switch filters (All/Active/Completed) and confirm both the list *and* badge counts reflect the selection.
+4. Seed >120 todos (use quick-add helper) and scroll; `<Virtualize>` should activate (visible in devtools) and keep scrolling responsive.
+5. Confirm modals trap focus, buttons have keyboard shortcuts, and color contrast passes WCAG AA.
+6. Inspect browser console for `ILogger` output when forcing storage failures (devtools localStorage quota errors) and trigger the ErrorBoundary by throwing from devtools to verify recovery messaging.
 
 ## Resetting State
 Clear `todoItems.v1` and `todoFilter.v1` from browser devtools or run:

@@ -4,6 +4,7 @@ using BlazorTodoApp.Components;
 using BlazorTodoApp.Models;
 using BlazorTodoApp.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Logging;
 
 namespace BlazorTodoApp.Pages;
@@ -18,6 +19,7 @@ public sealed partial class TodoDashboard : IDisposable
     private Guid? editingTodoId;
     private TodoEditMode editMode = TodoEditMode.Create;
     private string? formError;
+    private ErrorBoundary? errorBoundary;
 
     [Inject]
     public TodoStateService StateService { get; set; } = default!;
@@ -42,6 +44,7 @@ public sealed partial class TodoDashboard : IDisposable
 
     private void OpenCreateModal()
     {
+        errorBoundary?.Recover();
         editMode = TodoEditMode.Create;
         editingTodoId = null;
         formError = null;
@@ -51,6 +54,7 @@ public sealed partial class TodoDashboard : IDisposable
 
     private void HandleEditRequested(TodoItem item)
     {
+        errorBoundary?.Recover();
         editMode = TodoEditMode.Edit;
         editingTodoId = item.Id;
         formError = null;
@@ -60,6 +64,8 @@ public sealed partial class TodoDashboard : IDisposable
 
     private async Task HandleFormSubmitAsync(TodoFormModel _)
     {
+        errorBoundary?.Recover();
+        Logger.LogInformation("Submitting todo form in {Mode} mode for TodoId={TodoId}.", editMode, editingTodoId);
         isFormBusy = true;
         formError = null;
 
@@ -88,11 +94,35 @@ public sealed partial class TodoDashboard : IDisposable
         }
     }
 
-    private Task HandleToggleAsync(TodoItem item) =>
-        StateService.ToggleTodoAsync(item.Id);
+    private async Task HandleToggleAsync(TodoItem item)
+    {
+        errorBoundary?.Recover();
+        try
+        {
+            Logger.LogInformation("Toggle requested for todo {TodoId}.", item.Id);
+            await StateService.ToggleTodoAsync(item.Id);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failed to toggle todo {TodoId}.", item.Id);
+            throw;
+        }
+    }
 
-    private Task HandleDeleteAsync(TodoItem item) =>
-        StateService.DeleteTodoAsync(item.Id);
+    private async Task HandleDeleteAsync(TodoItem item)
+    {
+        errorBoundary?.Recover();
+        try
+        {
+            Logger.LogInformation("Delete requested for todo {TodoId}.", item.Id);
+            await StateService.DeleteTodoAsync(item.Id);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failed to delete todo {TodoId}.", item.Id);
+            throw;
+        }
+    }
 
     private async Task HandleFilterChanged(TodoFilterOption selection)
     {
@@ -103,6 +133,7 @@ public sealed partial class TodoDashboard : IDisposable
 
         try
         {
+            Logger.LogInformation("Filter change requested: {Selection}.", selection);
             await StateService.SetFilterAsync(selection);
         }
         catch (Exception ex)
@@ -127,6 +158,15 @@ public sealed partial class TodoDashboard : IDisposable
     {
         summary = StateService.Summary;
         visibleTodos = StateService.GetFilteredItems();
+    }
+
+    private async Task RecoverFromError()
+    {
+        Logger.LogWarning("Recovering dashboard after error.");
+        errorBoundary?.Recover();
+        await StateService.InitializeAsync();
+        SyncDerivedState();
+        await InvokeAsync(StateHasChanged);
     }
 
     public void Dispose()
