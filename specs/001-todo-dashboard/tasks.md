@@ -19,8 +19,8 @@
 
 **Purpose**: Prepare shared assets and styling hooks required across the dashboard.
 
-- [ ] T001 Create `wwwroot/css/todo-dashboard.css` with root tokens for list states, modal overlays, and summary badges in `BlazorTodoApp/wwwroot/css/todo-dashboard.css`
-- [ ] T002 Import the new stylesheet via `@import "todo-dashboard.css";` inside `BlazorTodoApp/wwwroot/css/app.css`
+- [X] T001 Create `wwwroot/css/todo-dashboard.css` with root tokens for list states, modal overlays, and summary badges in `BlazorTodoApp/wwwroot/css/todo-dashboard.css`
+- [X] T002 Import the new stylesheet via `@import "todo-dashboard.css";` inside `BlazorTodoApp/wwwroot/css/app.css`
 
 ---
 

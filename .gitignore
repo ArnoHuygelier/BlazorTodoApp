@@ -1,0 +1,35 @@
+# Build outputs
+bin/
+obj/
+packages/
+
+# User-specific files
+*.user
+*.suo
+*.userprefs
+*.sln.docstates
+
+# IDE metadata
+.vs/
+.idea/
+*.sln.iml
+
+# Logs and temp files
+*.log
+*.tlog
+*.tmp
+*.bak
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Tooling caches
+__pycache__/
+.vscode/
+*.code-workspace
+
+# Publish artifacts
+*.Publish.xml
+app.publish/
+/wwwroot/node_modules/
