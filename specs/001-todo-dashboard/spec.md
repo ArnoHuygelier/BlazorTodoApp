@@ -62,7 +62,7 @@ I open a single dashboard screen that lists all tasks and shows counts of total,
 ### Functional Requirements
 
 - **FR-001**: The system MUST allow the user to create todos with a required title and optional note directly from the dashboard.
-- **FR-002**: The system MUST allow the user to edit any existing todo inline or via a modal without duplicating the entry.
+- **FR-002**: The system MUST allow the user to edit any existing todo via a modal dialog without duplicating the entry.
 - **FR-003**: The user MUST be able to toggle an individual todo between done and not done states, with visual feedback for each state.
 - **FR-004**: The system MUST support deleting a todo with a confirmation step and remove it from the persistent store immediately.
 - **FR-005**: The dashboard MUST provide filter controls for "All", "Active", and "Completed" and update the visible list instantly when a filter changes.
@@ -89,3 +89,9 @@ I open a single dashboard screen that lists all tasks and shows counts of total,
 - **SC-002**: Switching filters updates the visible list in under 1 second for up to 200 items and never alters stored data.
 - **SC-003**: The dashboard summary always reflects accurate counts, with 100% consistency verified by automated or manual tests across add/edit/delete actions.
 - **SC-004**: At least 90% of usability test participants report they can understand their workload from the dashboard without needing external notes.
+
+## Clarifications
+
+### Session 2025-02-14
+
+- Q: How should todo editing be presented on the dashboard? A: Use a modal dialog for editing.
