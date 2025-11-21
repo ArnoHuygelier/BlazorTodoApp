@@ -4,6 +4,7 @@
 @using BlazorTodoApp.Models
 
 <PageTitle>Todo Dashboard</PageTitle>
+<PageTitle>Todo Dashboard</PageTitle>
 
 <ErrorBoundary @ref="errorBoundary">
     <ChildContent>
@@ -20,17 +21,6 @@
                             @onclick="OpenCreateModal">
                         Add todo
                     </button>
-                </div>
-                <div class="todo-summary-badges" aria-live="polite">
-                    <div class="todo-summary-badge" data-test="summary-total">
-                        Total <span class="todo-summary-badge__value">@summary.Total</span>
-                    </div>
-                    <div class="todo-summary-badge todo-summary-badge--active" data-test="summary-active">
-                        Active <span class="todo-summary-badge__value">@summary.Active</span>
-                    </div>
-                    <div class="todo-summary-badge todo-summary-badge--completed" data-test="summary-completed">
-                        Completed <span class="todo-summary-badge__value">@summary.Completed</span>
-                    </div>
                 </div>
 
                 @if (!StateService.IsInitialized)
