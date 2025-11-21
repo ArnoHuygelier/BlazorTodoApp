@@ -1,0 +1,87 @@
+@using BlazorTodoApp.Models
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web
+@namespace BlazorTodoApp.Components
+
+<div class="todo-filters"
+     data-test="todo-filters"
+     tabindex="0"
+     @onkeydown="HandleKeyDown">
+    @foreach (var option in FilterOptions)
+    {
+        <button type="button"
+                class="todo-filters__button @(SelectedFilter == option ? "is-selected" : null)"
+                data-test="@GetDataTest(option)"
+                aria-pressed="@GetPressedValue(option)"
+                @onclick="() => SelectFilterAsync(option)">
+            <span>@GetLabel(option)</span>
+            <span class="todo-filters__badge">@GetCount(option)</span>
+        </button>
+    }
+    <div class="visually-hidden">
+        Press 1 for All, 2 for Active, or 3 for Completed todos.
+    </div>
+</div>
+
+@code {
+    private static readonly TodoFilterOption[] FilterOptions =
+    {
+        TodoFilterOption.All,
+        TodoFilterOption.Active,
+        TodoFilterOption.Completed
+    };
+
+    [Parameter]
+    public TodoFilterOption SelectedFilter { get; set; }
+
+    [Parameter]
+    public int TotalCount { get; set; }
+
+    [Parameter]
+    public int ActiveCount { get; set; }
+
+    [Parameter]
+    public int CompletedCount { get; set; }
+
+    [Parameter]
+    public EventCallback<TodoFilterOption> OnFilterSelected { get; set; }
+
+    private Task SelectFilterAsync(TodoFilterOption option) =>
+        OnFilterSelected.InvokeAsync(option);
+
+    private string GetDataTest(TodoFilterOption option) =>
+        option switch
+        {
+            TodoFilterOption.Active => "filter-active",
+            TodoFilterOption.Completed => "filter-completed",
+            _ => "filter-all"
+        };
+
+    private static string GetLabel(TodoFilterOption option) =>
+        option switch
+        {
+            TodoFilterOption.Active => "Active",
+            TodoFilterOption.Completed => "Completed",
+            _ => "All"
+        };
+
+    private int GetCount(TodoFilterOption option) =>
+        option switch
+        {
+            TodoFilterOption.Active => ActiveCount,
+            TodoFilterOption.Completed => CompletedCount,
+            _ => TotalCount
+        };
+
+    private string GetPressedValue(TodoFilterOption option) =>
+        (SelectedFilter == option).ToString().ToLowerInvariant();
+
+    private Task HandleKeyDown(KeyboardEventArgs args) =>
+        args.Key switch
+        {
+            "1" or "Digit1" => SelectFilterAsync(TodoFilterOption.All),
+            "2" or "Digit2" => SelectFilterAsync(TodoFilterOption.Active),
+            "3" or "Digit3" => SelectFilterAsync(TodoFilterOption.Completed),
+            _ => Task.CompletedTask
+        };
+}

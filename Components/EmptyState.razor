@@ -1,0 +1,15 @@
+@using Microsoft.AspNetCore.Components
+@namespace BlazorTodoApp.Components
+
+<div class="text-center py-5" data-test="empty-state">
+    <p class="text-muted mb-2">You have no todos yet.</p>
+    <h2 class="h4 mb-4">Add your first todo to keep work on track.</h2>
+    <button class="btn btn-primary" type="button" data-test="empty-add-button" @onclick="OnCreateRequested">
+        Add a todo
+    </button>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback OnCreateRequested { get; set; }
+}
