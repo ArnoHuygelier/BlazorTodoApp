@@ -122,6 +122,51 @@ public class TodoDashboardTests
         });
     }
 
+    [Fact]
+    public void FiltersSwitchVisibleTodos()
+    {
+        var seed = new[]
+        {
+            TodoItem.Rehydrate(
+                Guid.Parse("d8e0a2f4-1af4-4a5d-9c27-69960c1b8131"),
+                "Draft proposal",
+                null,
+                false,
+                DateTimeOffset.UtcNow,
+                DateTimeOffset.UtcNow,
+                null),
+            TodoItem.Rehydrate(
+                Guid.Parse("4f06d77e-0bd8-4f1e-8dfc-5f7ecf52b0a3"),
+                "Submit report",
+                null,
+                true,
+                DateTimeOffset.UtcNow,
+                DateTimeOffset.UtcNow,
+                null)
+        };
+
+        using var ctx = CreateContext(seed);
+        var cut = ctx.RenderComponent<TodoDashboard>();
+
+        cut.WaitForAssertion(() => Assert.Equal(2, cut.FindAll("[data-test='todo-row']").Count));
+
+        cut.Find("[data-test='filter-completed']").Click();
+        cut.WaitForAssertion(() =>
+        {
+            var rows = cut.FindAll("[data-test='todo-row']");
+            Assert.Single(rows);
+            Assert.Contains("Submit report", rows[0].TextContent);
+        });
+
+        cut.Find("[data-test='filter-active']").Click();
+        cut.WaitForAssertion(() =>
+        {
+            var rows = cut.FindAll("[data-test='todo-row']");
+            Assert.Single(rows);
+            Assert.Contains("Draft proposal", rows[0].TextContent);
+        });
+    }
+
     private static TestContext CreateContext(IEnumerable<TodoItem>? seed = null)
     {
         var ctx = new TestContext();

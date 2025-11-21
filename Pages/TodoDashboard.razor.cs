@@ -12,6 +12,7 @@ public sealed partial class TodoDashboard : IDisposable
 {
     private readonly TodoFormModel formModel = new();
     private IReadOnlyList<TodoItem> visibleTodos = Array.Empty<TodoItem>();
+    private DashboardSummary summary = DashboardSummary.Empty;
     private bool isModalOpen;
     private bool isFormBusy;
     private Guid? editingTodoId;
@@ -30,12 +31,12 @@ public sealed partial class TodoDashboard : IDisposable
     {
         StateService.StateChanged += HandleStateChanged;
         await StateService.InitializeAsync();
-        visibleTodos = StateService.GetFilteredItems();
+        SyncDerivedState();
     }
 
     private async void HandleStateChanged(object? sender, EventArgs args)
     {
-        visibleTodos = StateService.GetFilteredItems();
+        SyncDerivedState();
         await InvokeAsync(StateHasChanged);
     }
 
@@ -93,11 +94,39 @@ public sealed partial class TodoDashboard : IDisposable
     private Task HandleDeleteAsync(TodoItem item) =>
         StateService.DeleteTodoAsync(item.Id);
 
+    private async Task HandleFilterChanged(TodoFilterOption selection)
+    {
+        if (StateService.CurrentFilter.Selection == selection)
+        {
+            return;
+        }
+
+        try
+        {
+            await StateService.SetFilterAsync(selection);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogWarning(ex, "Failed to update todo filter to {Selection}.", selection);
+        }
+        finally
+        {
+            SyncDerivedState();
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
     private void CloseModal()
     {
         isModalOpen = false;
         editingTodoId = null;
         formModel.LoadFrom(null);
+    }
+
+    private void SyncDerivedState()
+    {
+        summary = StateService.Summary;
+        visibleTodos = StateService.GetFilteredItems();
     }
 
     public void Dispose()

@@ -74,15 +74,15 @@
 
 ### Tests for User Story 2
 
-- [ ] T020 [P] [US2] Add bUnit tests covering filter button behavior, ARIA states, and persistence in `BlazorTodoApp.Tests/Components/TodoFiltersTests.cs`
-- [ ] T021 [P] [US2] Extend `BlazorTodoApp.Tests/Services/TodoStateServiceTests.cs` with cases verifying filter selection storage and restored state
+- [X] T020 [P] [US2] Add bUnit tests covering filter button behavior, ARIA states, and persistence in `BlazorTodoApp.Tests/Components/TodoFiltersTests.cs`
+- [X] T021 [P] [US2] Extend `BlazorTodoApp.Tests/Services/TodoStateServiceTests.cs` with cases verifying filter selection storage and restored state
 
 ### Implementation for User Story 2
 
-- [ ] T022 [US2] Implement `TodoFilters` component with All/Active/Completed controls, badge counts slots, and keyboard shortcuts in `BlazorTodoApp/Components/TodoFilters.razor`
-- [ ] T023 [US2] Update `TodoStateService` to expose `CurrentFilter`, filtered views, and persistence hooks in `BlazorTodoApp/Services/TodoStateService.cs`
-- [ ] T024 [US2] Persist filter selection within `LocalStorageTodoRepository` using dedicated key per contract in `BlazorTodoApp/Services/LocalStorageTodoRepository.cs`
-- [ ] T025 [US2] Integrate filter component into dashboard layout, wiring callbacks and state updates in `BlazorTodoApp/Pages/TodoDashboard.razor`
+- [X] T022 [US2] Implement `TodoFilters` component with All/Active/Completed controls, badge counts slots, and keyboard shortcuts in `BlazorTodoApp/Components/TodoFilters.razor`
+- [X] T023 [US2] Update `TodoStateService` to expose `CurrentFilter`, filtered views, and persistence hooks in `BlazorTodoApp/Services/TodoStateService.cs`
+- [X] T024 [US2] Persist filter selection within `LocalStorageTodoRepository` using dedicated key per contract in `BlazorTodoApp/Services/LocalStorageTodoRepository.cs`
+- [X] T025 [US2] Integrate filter component into dashboard layout, wiring callbacks and state updates in `BlazorTodoApp/Pages/TodoDashboard.razor`
 
 **Checkpoint**: Filtering UX independently testable with restored context after refresh.
 

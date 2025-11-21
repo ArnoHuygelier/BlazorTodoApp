@@ -24,16 +24,25 @@
         {
             <p class="text-muted">Loading your todos...</p>
         }
-        else if (!visibleTodos.Any())
-        {
-            <EmptyState OnCreateRequested="OpenCreateModal" />
-        }
         else
         {
-            <TodoList Items="visibleTodos"
-                      OnEditRequested="HandleEditRequested"
-                      OnToggleRequested="HandleToggleAsync"
-                      OnDeleteRequested="HandleDeleteAsync" />
+            <TodoFilters SelectedFilter="StateService.CurrentFilter.Selection"
+                         TotalCount="summary.Total"
+                         ActiveCount="summary.Active"
+                         CompletedCount="summary.Completed"
+                         OnFilterSelected="HandleFilterChanged" />
+
+            @if (!visibleTodos.Any())
+            {
+                <EmptyState OnCreateRequested="OpenCreateModal" />
+            }
+            else
+            {
+                <TodoList Items="visibleTodos"
+                          OnEditRequested="HandleEditRequested"
+                          OnToggleRequested="HandleToggleAsync"
+                          OnDeleteRequested="HandleDeleteAsync" />
+            }
         }
     </div>
 </div>

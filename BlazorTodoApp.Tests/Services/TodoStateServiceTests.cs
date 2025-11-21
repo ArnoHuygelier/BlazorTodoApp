@@ -1,3 +1,4 @@
+using System.Linq;
 using BlazorTodoApp.Models;
 using BlazorTodoApp.Services;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -78,5 +79,47 @@ public class TodoStateServiceTests
         var remaining = Assert.Single(service.Items);
         Assert.Equal(keep.Id, remaining.Id);
         repository.Verify(r => r.SaveAsync(It.Is<IReadOnlyList<TodoItem>>(items => items.Single().Id == keep.Id), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task InitializeAsync_AppliesStoredFilter()
+    {
+        repository.Setup(r => r.LoadFilterAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new TodoFilter(TodoFilterOption.Completed));
+
+        await service.InitializeAsync();
+
+        Assert.Equal(TodoFilterOption.Completed, service.CurrentFilter.Selection);
+    }
+
+    [Fact]
+    public async Task SetFilterAsync_PersistsSelection()
+    {
+        var notified = false;
+        service.StateChanged += (_, _) => notified = true;
+
+        await service.SetFilterAsync(TodoFilterOption.Active);
+
+        Assert.True(notified);
+        Assert.Equal(TodoFilterOption.Active, service.CurrentFilter.Selection);
+        repository.Verify(r => r.SaveFilterAsync(
+            It.Is<TodoFilter>(filter => filter.Selection == TodoFilterOption.Active),
+            It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetFilteredItems_UsesCurrentFilter()
+    {
+        var completed = TodoItem.Rehydrate(Guid.NewGuid(), "Completed", null, true, DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, null);
+        var active = TodoItem.Rehydrate(Guid.NewGuid(), "Active", null, false, DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, null);
+        repository.Setup(r => r.LoadAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new[] { completed, active });
+
+        await service.InitializeAsync();
+        await service.SetFilterAsync(TodoFilterOption.Completed);
+
+        var filtered = service.GetFilteredItems();
+        var item = Assert.Single(filtered);
+        Assert.Equal(completed.Id, item.Id);
     }
 }

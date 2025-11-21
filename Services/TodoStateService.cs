@@ -11,6 +11,7 @@ public sealed class TodoStateService
     private readonly List<TodoItem> items = new();
 
     private TodoFilter currentFilter = TodoFilter.Default;
+    private DashboardSummary summary = DashboardSummary.Empty;
 
     public event EventHandler? StateChanged;
 
@@ -19,6 +20,8 @@ public sealed class TodoStateService
     public IReadOnlyList<TodoItem> Items => items.AsReadOnly();
 
     public TodoFilter CurrentFilter => currentFilter;
+
+    public DashboardSummary Summary => summary;
 
     public TodoStateService(ITodoRepository repository, ILogger<TodoStateService> logger)
     {
@@ -38,6 +41,7 @@ public sealed class TodoStateService
         items.AddRange(loadedItems.OrderBy(item => item.CreatedAt));
 
         currentFilter = await repository.LoadFilterAsync(cancellationToken);
+        RecalculateSummary();
         IsInitialized = true;
         NotifyStateChanged();
     }
@@ -60,6 +64,7 @@ public sealed class TodoStateService
         items.Add(newItem);
 
         await PersistAsync(cancellationToken);
+        RecalculateSummary();
         NotifyStateChanged();
         return newItem;
     }
@@ -72,6 +77,7 @@ public sealed class TodoStateService
 
         existing.UpdateDetails(title, note, dueDay, DateTimeOffset.UtcNow);
         await PersistAsync(cancellationToken);
+        RecalculateSummary();
         NotifyStateChanged();
     }
 
@@ -82,6 +88,7 @@ public sealed class TodoStateService
         existing.SetCompletion(!existing.IsCompleted, DateTimeOffset.UtcNow);
 
         await PersistAsync(cancellationToken);
+        RecalculateSummary();
         NotifyStateChanged();
     }
 
@@ -96,6 +103,7 @@ public sealed class TodoStateService
         }
 
         await PersistAsync(cancellationToken);
+        RecalculateSummary();
         NotifyStateChanged();
     }
 
@@ -110,6 +118,7 @@ public sealed class TodoStateService
 
         currentFilter = currentFilter.WithSelection(selection);
         await repository.SaveFilterAsync(currentFilter, cancellationToken);
+        RecalculateSummary();
         NotifyStateChanged();
     }
 
@@ -150,6 +159,14 @@ public sealed class TodoStateService
 
     private Task PersistAsync(CancellationToken cancellationToken) =>
         repository.SaveAsync(items, cancellationToken);
+
+    private void RecalculateSummary()
+    {
+        var total = items.Count;
+        var active = items.Count(item => !item.IsCompleted);
+        var completed = total - active;
+        summary = new DashboardSummary(total, active, completed, currentFilter.Selection);
+    }
 
     private void NotifyStateChanged()
     {
