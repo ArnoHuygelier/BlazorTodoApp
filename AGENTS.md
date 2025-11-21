@@ -1,4 +1,4 @@
-# Repository Guidelines
+﻿# Repository Guidelines
 
 ## Project Structure & Module Organization
 The Blazor WebAssembly app is defined by `BlazorTodoApp.csproj`, with hosting configured in `Program.cs` and the root component wired through `App.razor`. Feature UI lives in `Pages/` (e.g., `Home.razor`, `Counter.razor`, `Weather.razor`, `NotFound.razor`), while shared scaffolding sits in `Layout/`. Keep assets, CSS, and manifest files in `wwwroot/`; generated build output remains under `obj/`. Specifications and Codex agent prompts are stored inside `.specify/` and `.codex/`; update those only when the corresponding spec documents change.
