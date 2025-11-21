@@ -167,6 +167,37 @@ public class TodoDashboardTests
         });
     }
 
+    [Fact]
+    public void SummaryBadgesReflectStateChanges()
+    {
+        var seed = new[]
+        {
+            TodoItem.Rehydrate(
+                Guid.Parse("f0e1c2d3-b4a5-6789-8abc-def012345678"),
+                "Initial active",
+                null,
+                false,
+                DateTimeOffset.UtcNow,
+                DateTimeOffset.UtcNow,
+                null)
+        };
+
+        using var ctx = CreateContext(seed);
+        var cut = ctx.RenderComponent<TodoDashboard>();
+
+        cut.WaitForAssertion(() =>
+        {
+            Assert.Equal("1", cut.Find("[data-test='summary-total'] .todo-summary-badge__value").TextContent);
+            Assert.Equal("1", cut.Find("[data-test='summary-active'] .todo-summary-badge__value").TextContent);
+            Assert.Equal("0", cut.Find("[data-test='summary-completed'] .todo-summary-badge__value").TextContent);
+        });
+
+        cut.Find("[data-test='toggle-button']").Click();
+
+        cut.WaitForAssertion(() =>
+            Assert.Equal("1", cut.Find("[data-test='summary-completed'] .todo-summary-badge__value").TextContent));
+    }
+
     private static TestContext CreateContext(IEnumerable<TodoItem>? seed = null)
     {
         var ctx = new TestContext();

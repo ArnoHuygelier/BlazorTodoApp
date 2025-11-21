@@ -1,14 +1,29 @@
+@using System.Collections.Generic
+@using System.Linq
 @using BlazorTodoApp.Models
 @using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web.Virtualization
 @namespace BlazorTodoApp.Components
 
 <div class="d-flex flex-column gap-3" role="list">
-    @foreach (var todo in Items)
+    @if (ShouldVirtualize)
     {
-        <TodoItemRow Todo="todo"
-                     OnToggleRequested="OnToggleRequested"
-                     OnEditRequested="OnEditRequested"
-                     OnDeleteRequested="OnDeleteRequested" />
+        <Virtualize Items="VirtualizedItems" Context="todo" TItem="TodoItem">
+            <TodoItemRow Todo="todo"
+                         OnToggleRequested="OnToggleRequested"
+                         OnEditRequested="OnEditRequested"
+                         OnDeleteRequested="OnDeleteRequested" />
+        </Virtualize>
+    }
+    else
+    {
+        @foreach (var todo in Items)
+        {
+            <TodoItemRow Todo="todo"
+                         OnToggleRequested="OnToggleRequested"
+                         OnEditRequested="OnEditRequested"
+                         OnDeleteRequested="OnDeleteRequested" />
+        }
     }
 </div>
 
@@ -24,4 +39,11 @@
 
     [Parameter]
     public EventCallback<TodoItem> OnDeleteRequested { get; set; }
+
+    private const int VirtualizeThreshold = 75;
+
+    private bool ShouldVirtualize => Items.Count > VirtualizeThreshold;
+
+    private ICollection<TodoItem> VirtualizedItems =>
+        Items as ICollection<TodoItem> ?? Items.ToList();
 }

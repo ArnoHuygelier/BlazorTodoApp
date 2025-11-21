@@ -96,15 +96,15 @@
 
 ### Tests for User Story 3
 
-- [ ] T026 [P] [US3] Extend `TodoDashboard` bUnit tests to assert summary badges update with adds/toggles in `BlazorTodoApp.Tests/Components/TodoDashboardTests.cs`
-- [ ] T027 [P] [US3] Add `TodoList` rendering test to verify `<Virtualize>` activates beyond 75 items using `BlazorTodoApp.Tests/Components/TodoListTests.cs`
+- [X] T026 [P] [US3] Extend `TodoDashboard` bUnit tests to assert summary badges update with adds/toggles in `BlazorTodoApp.Tests/Components/TodoDashboardTests.cs`
+- [X] T027 [P] [US3] Add `TodoList` rendering test to verify `<Virtualize>` activates beyond 75 items using `BlazorTodoApp.Tests/Components/TodoListTests.cs`
 
 ### Implementation for User Story 3
 
-- [ ] T028 [US3] Render summary badges (total/active/completed) in the dashboard header inside `BlazorTodoApp/Pages/TodoDashboard.razor`
-- [ ] T029 [US3] Expose derived summary model and change notifications from `TodoStateService` in `BlazorTodoApp/Services/TodoStateService.cs`
-- [ ] T030 [US3] Upgrade `TodoList.razor` to switch between `<Virtualize>` and simple `@foreach` based on item count threshold
-- [ ] T031 [US3] Enhance `wwwroot/css/todo-dashboard.css` with responsive layout, badge styling, and state colors that meet WCAG AA
+- [X] T028 [US3] Render summary badges (total/active/completed) in the dashboard header inside `BlazorTodoApp/Pages/TodoDashboard.razor`
+- [X] T029 [US3] Expose derived summary model and change notifications from `TodoStateService` in `BlazorTodoApp/Services/TodoStateService.cs`
+- [X] T030 [US3] Upgrade `TodoList.razor` to switch between `<Virtualize>` and simple `@foreach` based on item count threshold
+- [X] T031 [US3] Enhance `wwwroot/css/todo-dashboard.css` with responsive layout, badge styling, and state colors that meet WCAG AA
 
 **Checkpoint**: Dashboard provides high-level insights and remains performant with large lists.
 

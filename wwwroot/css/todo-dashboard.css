@@ -192,4 +192,13 @@
     .todo-list-row {
         grid-template-columns: 1fr;
     }
+
+    .todo-summary-badges {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .todo-filters {
+        flex-direction: column;
+    }
 }
