@@ -1,13 +1,11 @@
 ---
-description: Create or update the feature specification from a natural language feature description.
-handoffs: 
-  - label: Build Technical Plan
-    agent: speckit.plan
-    prompt: Create a plan for the spec. I am building with...
+description: Generate a feature specification and do not proceed with code implementation until the spec is clarified and approved.
+
+handoffs:
   - label: Clarify Spec Requirements
     agent: speckit.clarify
-    prompt: Clarify specification requirements
-    send: true
+    prompt: Clarify specification requirements based on the generated spec. Do not proceed with implementation until clarified.
+    send: false
 ---
 
 ## User Input
